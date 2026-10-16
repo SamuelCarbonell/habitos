@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="utf-8">
+  <!-- user-scalable=no evita el zoom con doble toque; viewport-fit=cover usa toda la pantalla del iPhone -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
+  <title>Block Blast</title>
+  <meta name="theme-color" content="#2b3f8f">
+
+  <!-- Ajustes para que en iPhone se abra como app a pantalla completa -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Block Blast">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <header>
+    <div class="top">
+      <div class="best"><span class="crown">👑</span> <span id="best">0</span></div>
+      <div class="btns">
+        <button id="soundBtn" aria-label="Sonido">🔊</button>
+        <button id="restartBtn" aria-label="Nueva partida">↻</button>
+      </div>
+    </div>
+    <div id="score">0</div>
+  </header>
+
+  <main id="stage">
+    <canvas id="game"></canvas>
+  </main>
+
+  <div id="overlay" hidden>
+    <div class="card">
+      <h2>¡Sin movimientos!</h2>
+      <p class="label">Puntuación</p>
+      <div id="finalScore">0</div>
+      <p id="newBest" hidden>🏆 ¡Nuevo récord!</p>
+      <button id="againBtn">Jugar de nuevo</button>
+    </div>
+  </div>
+
+  <script src="game.js"></script>
+  <script>
+    // Registrar el service worker para que funcione sin conexión
+    if ('serviceWorker' in navigator) {
+      navigator.serviceWorker.register('sw.js');
+    }
+  </script>
+</body>
+</html>

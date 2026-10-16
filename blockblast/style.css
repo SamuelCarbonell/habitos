@@ -1,0 +1,130 @@
+/* ===== Estilos de Block Blast ===== */
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
+
+body {
+  /* position fixed evita que Safari "rebote" al arrastrar */
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  background: linear-gradient(180deg, #3d5fc4 0%, #2b3f8f 100%);
+  color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  /* Evitar seleccionar texto, menús de pulsación larga y gestos del navegador */
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  /* Respetar el notch y la barra de inicio del iPhone */
+  padding: env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);
+}
+
+header {
+  padding: 10px 16px 0;
+  flex: none;
+}
+
+.top {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.best {
+  font-size: 20px;
+  font-weight: 700;
+  color: #ffd84d;
+  display: flex;
+  align-items: center;
+  gap: 4px;
+}
+
+.btns { display: flex; gap: 8px; }
+
+.btns button {
+  width: 40px;
+  height: 40px;
+  border: none;
+  border-radius: 12px;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  font-size: 20px;
+  cursor: pointer;
+}
+.btns button:active { background: rgba(255, 255, 255, 0.3); }
+
+#score {
+  text-align: center;
+  font-size: 52px;
+  font-weight: 800;
+  line-height: 1.1;
+  text-shadow: 0 3px 0 rgba(0, 0, 0, 0.2);
+  font-variant-numeric: tabular-nums;
+}
+
+#stage {
+  flex: 1;
+  position: relative;
+  min-height: 0;
+}
+
+#game {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  touch-action: none;
+}
+
+/* ===== Pantalla de fin de partida ===== */
+#overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 16, 45, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px;
+  animation: fadeIn 0.3s ease;
+}
+#overlay[hidden] { display: none; }
+
+.card {
+  background: linear-gradient(180deg, #4766d1, #2f4499);
+  border-radius: 24px;
+  padding: 28px 24px;
+  width: 100%;
+  max-width: 320px;
+  text-align: center;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.4);
+}
+
+.card h2 { font-size: 26px; margin-bottom: 16px; }
+.card .label { opacity: 0.8; font-size: 15px; }
+#finalScore { font-size: 56px; font-weight: 800; margin: 4px 0 8px; }
+#newBest { color: #ffd84d; font-weight: 700; margin-bottom: 8px; }
+
+#againBtn {
+  margin-top: 12px;
+  width: 100%;
+  padding: 16px;
+  border: none;
+  border-radius: 16px;
+  background: #5cc84a;
+  color: #fff;
+  font-size: 20px;
+  font-weight: 800;
+  box-shadow: 0 5px 0 #3d9a2f;
+  cursor: pointer;
+}
+#againBtn:active { transform: translateY(3px); box-shadow: 0 2px 0 #3d9a2f; }
+
+@keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
