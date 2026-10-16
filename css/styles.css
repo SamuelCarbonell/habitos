@@ -1,0 +1,277 @@
+/* styles.css — Aspecto inspirado en iOS, con modo oscuro automático. */
+
+/* ---------- Variables de color (tema claro) ---------- */
+:root {
+  --bg: #f2f2f7;
+  --card: #ffffff;
+  --text: #1c1c1e;
+  --muted: #8e8e93;
+  --line: #e5e5ea;
+  --empty: #e9e9ee;
+  --accent: #0a84ff;
+  --danger: #ff3b30;
+  --radius: 16px;
+  color-scheme: light dark;
+}
+
+/* ---------- Tema oscuro: solo cambiamos las variables ---------- */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --bg: #000000;
+    --card: #1c1c1e;
+    --text: #f2f2f7;
+    --muted: #8e8e93;
+    --line: #2c2c2e;
+    --empty: #2c2c2e;
+  }
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Segoe UI", Roboto, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -webkit-tap-highlight-color: transparent; /* quita el destello gris al tocar en iOS */
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  cursor: pointer;
+}
+
+/* Contenedor principal: respeta notch (arriba) y barra de inicio (abajo) */
+#app {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: calc(env(safe-area-inset-top) + 12px) 16px calc(env(safe-area-inset-bottom) + 96px);
+}
+
+h1 { font-size: 34px; margin: 0; letter-spacing: -0.5px; }
+.page-title { margin: 8px 0 4px; }
+.section-title {
+  font-size: 13px; text-transform: uppercase; letter-spacing: .5px;
+  color: var(--muted); font-weight: 600; margin: 24px 4px 8px;
+}
+.muted { color: var(--muted); }
+.small { font-size: 13px; }
+.center { text-align: center; }
+.eyebrow { margin: 0; color: var(--muted); font-weight: 600; }
+.eyebrow::first-letter { text-transform: uppercase; } /* "viernes" -> "Viernes" */
+
+/* ---------- Cabecera ---------- */
+.topbar {
+  display: flex; align-items: flex-end; justify-content: space-between;
+  min-height: 44px; margin-bottom: 12px;
+}
+.icon-btn { font-size: 22px; width: 44px; height: 44px; border-radius: 50%; }
+.back, .link { color: var(--accent); font-size: 17px; padding: 8px 0; }
+.link.bold { font-weight: 600; }
+
+.tip {
+  background: var(--card); border-radius: 12px; padding: 12px 14px;
+  font-size: 14px; margin: 0 0 12px;
+}
+
+/* ---------- Calendario mensual ---------- */
+.calendar { margin-bottom: 16px; padding: 12px; }
+.cal-head { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+.cal-title { font-size: 17px; }
+.cal-title::first-letter { text-transform: uppercase; } /* "octubre" -> "Octubre" */
+.cal-nav { width: 36px; height: 36px; border-radius: 50%; font-size: 24px; color: var(--accent); }
+.cal-nav:disabled { color: var(--line); cursor: default; }
+
+/* Cabecera L M X J V S D: barra con fondo propio para separarla de los números */
+.cal-weekdays {
+  display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; /* mismo gap que .cal-grid: columnas alineadas */
+  background: var(--empty); border-radius: 10px;
+  padding: 7px 0; margin-bottom: 8px;
+}
+.cal-weekday { text-align: center; font-size: 13px; font-weight: 700; color: var(--text); }
+.cal-weekday.is-weekend { color: var(--muted); }
+.cal-weekday.is-today { color: var(--accent); } /* día de la semana de hoy */
+
+.cal-grid { display: grid; grid-template-columns: repeat(7, 1fr); gap: 4px; }
+.cal-day {
+  aspect-ratio: 1; border-radius: 50%;
+  display: grid; place-items: center;
+  font-size: 15px; font-variant-numeric: tabular-nums;
+}
+/* Colores por estado (las clases las pone dayStatus() vía app.js) */
+.cal-day.is-complete { background: #30d158; color: #fff; font-weight: 600; }
+.cal-day.is-partial  { background: color-mix(in srgb, #ff9f0a 28%, transparent); color: #ff9f0a; font-weight: 600; }
+.cal-day.is-missed   { background: color-mix(in srgb, #ff453a 22%, transparent); color: #ff453a; }
+.cal-day.is-pending  { color: var(--text); }
+.cal-day.is-none     { color: var(--text); opacity: .75; }
+.cal-day.is-future   { color: var(--muted); opacity: .5; }
+.cal-day.is-today    { box-shadow: 0 0 0 2px var(--text); }
+
+.cal-legend { display: flex; justify-content: center; gap: 16px; margin-top: 10px; font-size: 12px; color: var(--muted); }
+.cal-legend span { display: flex; align-items: center; gap: 5px; }
+.cal-legend i { width: 10px; height: 10px; border-radius: 50%; }
+.cal-legend .is-complete { background: #30d158; }
+.cal-legend .is-partial { background: #ff9f0a; }
+.cal-legend .is-missed { background: #ff453a; }
+
+/* ---------- Progreso del día ---------- */
+.progress { margin: 4px 0 16px; }
+.progress-text { margin-bottom: 8px; color: var(--muted); }
+.progress-text strong { color: var(--text); }
+.progress-bar { height: 8px; border-radius: 4px; background: var(--empty); overflow: hidden; }
+.progress-bar span {
+  display: block; height: 100%; width: var(--p);
+  background: #30d158; border-radius: 4px; transition: width .3s ease;
+}
+
+/* ---------- Tarjeta de hábito ---------- */
+.list { display: grid; gap: 10px; }
+.list.is-dim { opacity: .55; }
+
+.card {
+  display: flex; align-items: center; gap: 8px;
+  background: var(--card); border-radius: var(--radius);
+  padding: 12px 12px 12px 14px;
+}
+.card-main { flex: 1; display: flex; align-items: center; gap: 12px; text-align: left; min-width: 0; }
+.emoji {
+  flex: none; width: 44px; height: 44px; border-radius: 12px;
+  display: grid; place-items: center; font-size: 24px;
+  background: color-mix(in srgb, var(--c) 18%, transparent);
+}
+.emoji.big { width: 72px; height: 72px; font-size: 40px; border-radius: 20px; }
+.info { display: grid; gap: 3px; min-width: 0; }
+.name { font-weight: 600; font-size: 17px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.meta { color: var(--muted); font-size: 13px; }
+
+.dots { display: flex; gap: 4px; margin-top: 2px; }
+.dot { width: 8px; height: 8px; border-radius: 50%; border: 1.5px solid var(--c); }
+.dot.is-done { background: var(--c); }
+.dot.is-off { border-color: var(--line); }
+
+/* Botón de check redondo */
+.check {
+  flex: none; width: 44px; height: 44px; border-radius: 50%;
+  border: 2.5px solid var(--c); display: grid; place-items: center;
+  transition: background .15s ease, transform .1s ease;
+}
+.check:active { transform: scale(.9); }
+.check svg { width: 24px; height: 24px; fill: none; stroke: transparent; stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.card.is-done .check { background: var(--c); }
+.card.is-done .check svg { stroke: #fff; }
+
+/* Botón flotante "+" */
+.fab {
+  position: fixed; right: 20px; bottom: calc(env(safe-area-inset-bottom) + 20px);
+  width: 60px; height: 60px; border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 6px 20px rgba(10, 132, 255, .4);
+  display: grid; place-items: center; /* centra el icono en ambos ejes */
+}
+/* El "+" es un SVG (no texto) para que quede centrado igual con cualquier fuente */
+.fab svg { width: 26px; height: 26px; fill: none; stroke: #fff; stroke-width: 3; stroke-linecap: round; }
+.fab:active { transform: scale(.94); }
+
+/* Estado vacío */
+.empty { text-align: center; padding: 64px 16px; }
+.empty-icon { font-size: 56px; }
+
+/* ---------- Detalle ---------- */
+.detail-head { display: grid; justify-items: center; gap: 8px; text-align: center; margin: 8px 0 20px; }
+.detail-head h1 { font-size: 28px; }
+.detail-head p { margin: 0; }
+
+.stats { display: grid; grid-template-columns: repeat(2, 1fr); gap: 10px; }
+.stat { background: var(--card); border-radius: var(--radius); padding: 14px; display: grid; gap: 2px; }
+.stat strong { font-size: 28px; color: var(--c); }
+.stat span { color: var(--muted); font-size: 13px; }
+
+.panel { background: var(--card); border-radius: var(--radius); padding: 14px; }
+.panel p { margin: 0 0 8px; }
+.panel p:last-child { margin-bottom: 0; }
+
+/* Mapa de calor: 7 filas (L..D) y una columna por semana */
+.heatmap { display: flex; gap: 6px; margin-bottom: 10px; }
+.heatmap-labels { display: grid; grid-template-rows: repeat(7, 1fr); gap: 3px; font-size: 10px; color: var(--muted); }
+.heatmap-labels span { display: grid; place-items: center; }
+.heatmap-grid {
+  flex: 1; display: grid; gap: 3px;
+  grid-template-rows: repeat(7, 1fr);
+  grid-auto-flow: column;   /* rellena por columnas: cada columna es una semana */
+  grid-auto-columns: 1fr;
+}
+.cell { aspect-ratio: 1; border-radius: 3px; background: var(--empty); }
+.cell.is-off { opacity: .4; }
+.cell.is-done { background: var(--c); opacity: 1; }
+.cell.is-today { outline: 2px solid var(--text); outline-offset: -2px; }
+.cell.is-future { background: transparent; }
+
+.actions { display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; }
+.panel .actions { margin-top: 12px; }
+.btn-primary, .btn-secondary, .btn-danger {
+  flex: 1; min-height: 48px; border-radius: 12px; font-weight: 600; font-size: 16px;
+  display: inline-grid; place-items: center; padding: 0 16px; cursor: pointer;
+}
+.btn-primary { background: var(--accent); color: #fff; }
+.btn-secondary { background: var(--empty); color: var(--text); }
+.btn-danger { background: color-mix(in srgb, var(--danger) 15%, transparent); color: var(--danger); }
+.empty .btn-primary { flex: none; margin-top: 12px; }
+
+.list-plain .row {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 6px 0; border-bottom: 1px solid var(--line);
+}
+.list-plain .row:last-child { border-bottom: 0; }
+
+/* ---------- Hoja inferior (formulario) ---------- */
+.sheet-backdrop { position: fixed; inset: 0; background: rgba(0, 0, 0, .4); z-index: 10; }
+.sheet {
+  position: fixed; left: 0; right: 0; bottom: 0; z-index: 11;
+  max-width: 560px; margin: 0 auto; max-height: 92vh; overflow-y: auto;
+  background: var(--bg); border-radius: 20px 20px 0 0;
+  padding: 8px 16px calc(env(safe-area-inset-bottom) + 24px);
+  transform: translateY(100%); transition: transform .25s ease;
+}
+.sheet.is-open { transform: translateY(0); }
+.sheet-head {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 8px 0 16px;
+}
+
+.field { display: grid; gap: 8px; margin-bottom: 20px; }
+.field > span { font-size: 13px; text-transform: uppercase; color: var(--muted); font-weight: 600; letter-spacing: .5px; }
+.field input {
+  font: inherit; font-size: 17px; /* 16px o más evita que iOS haga zoom al enfocar */
+  padding: 14px; border-radius: 12px; border: 0; background: var(--card); color: var(--text);
+}
+.chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.chip {
+  width: 44px; height: 44px; border-radius: 12px; font-size: 22px;
+  background: var(--card); border: 2px solid transparent;
+}
+.chip.is-on { border-color: var(--accent); }
+.swatch {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--c);
+  border: 3px solid var(--bg); box-shadow: 0 0 0 2px transparent;
+}
+.swatch.is-on { box-shadow: 0 0 0 2px var(--c); }
+.days { display: grid; grid-template-columns: repeat(7, 1fr); gap: 6px; }
+.day { aspect-ratio: 1; border-radius: 50%; background: var(--card); font-weight: 600; }
+.day.is-on { background: var(--c); color: #fff; }
+.presets { display: flex; gap: 16px; }
+.presets .link { font-size: 15px; }
+
+/* ---------- Avisos ---------- */
+.toast {
+  position: fixed; left: 50%; bottom: calc(env(safe-area-inset-bottom) + 96px);
+  transform: translateX(-50%); z-index: 20;
+  background: rgba(28, 28, 30, .92); color: #fff;
+  padding: 10px 18px; border-radius: 20px; font-size: 15px;
+  animation: toast-in .2s ease;
+}
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, 8px); } }
